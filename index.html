@@ -14,12 +14,12 @@
 
       --text:#F6F3EA;
 
-      --accent:#05d2ff;      /* Cyan for AI/Tech feel */
-      --accent2:#53d1b6;     /* Teal secondary */
-      --deep:#1e4752;
-      --warm0:#ff9e05;       /* Warning */
-      --warm1:#ffce6f;
-      --danger:#ff0542;      /* Critical/Malfunction */
+      --accent:#D2FF05;      /* Neon Green */
+      --accent2:#9AD153;     /* Secondary Green */
+      --deep:#527D2D;        /* Deep Green */
+      --warm0:#B8901F;       /* Warm Warning */
+      --warm1:#EED56F;
+      --danger:#ff0542;      /* Critical/Malfunction (Red preserved for errors) */
 
       /* System */
       --s:8px;               /* 8pt spacing system */
@@ -35,7 +35,7 @@
       --head: "Montserrat","Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       --body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       --shadow: 0 16px 40px rgba(0,0,0,.60);
-      --glow: 0 0 20px rgba(5, 210, 255, 0.15);
+      --glow: 0 0 20px rgba(210, 255, 5, 0.15);
     }
 
     *{box-sizing:border-box}
@@ -45,9 +45,9 @@
       font-family: var(--body);
       color: var(--text);
       background:
-        radial-gradient(1400px 900px at 20% -10%, rgba(5,210,255,.08), transparent 60%),
-        radial-gradient(1000px 800px at 80% 10%, rgba(83,209,182,.06), transparent 55%),
-        radial-gradient(1000px 800px at 50% 110%, rgba(100,100,255,.05), transparent 60%),
+        radial-gradient(1400px 900px at 20% -10%, rgba(210,255,5,.10), transparent 60%),
+        radial-gradient(1000px 800px at 80% 10%, rgba(154,209,83,.08), transparent 55%),
+        radial-gradient(1000px 800px at 50% 110%, rgba(210,255,5,.05), transparent 60%),
         var(--bg0);
       display:flex;
       align-items:center;
@@ -75,7 +75,7 @@
       content:"";
       position:absolute; inset:0;
       background:
-        linear-gradient(90deg, rgba(5,210,255,.03) 1px, transparent 1px) 0 0 / 80px 80px,
+        linear-gradient(90deg, rgba(210,255,5,.03) 1px, transparent 1px) 0 0 / 80px 80px,
         linear-gradient(0deg, rgba(246,243,234,.02) 1px, transparent 1px) 0 0 / 80px 80px;
       pointer-events:none;
       mix-blend-mode: screen;
@@ -129,7 +129,7 @@
     }
     .ai-badge {
       font-size: 10px;
-      background: rgba(5, 210, 255, 0.15);
+      background: rgba(210, 255, 5, 0.15);
       border: 1px solid var(--accent);
       color: var(--accent);
       padding: 2px 6px;
@@ -177,17 +177,17 @@
       white-space:nowrap;
       font-weight: 500;
     }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(5,210,255,.4); background: rgba(5,210,255,.08); }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(210,255,5,.4); background: rgba(210,255,5,.08); }
     .btn:active{ transform: translateY(0px) scale(.98); }
 
     .btn.primary{
-      border-color: rgba(5,210,255,.5);
-      background: linear-gradient(135deg, rgba(5,210,255,.15), rgba(26,33,43,.6));
+      border-color: rgba(210,255,5,.5);
+      background: linear-gradient(135deg, rgba(210,255,5,.15), rgba(26,33,43,.6));
       color: #fff;
-      box-shadow: 0 4px 12px rgba(5,210,255,.12);
+      box-shadow: 0 4px 12px rgba(210,255,5,.12);
     }
     .btn.primary:hover {
-      box-shadow: 0 4px 16px rgba(5,210,255,.25);
+      box-shadow: 0 4px 16px rgba(210,255,5,.25);
     }
     .btn.danger{
         border-color: rgba(255,5,66,.5);
@@ -240,7 +240,7 @@
       transition: border-color 0.3s ease;
     }
     .panel:hover {
-        border-color: rgba(5,210,255,.2);
+        border-color: rgba(210,255,5,.2);
     }
     .panelHead{
       padding: calc(var(--s)*2) calc(var(--s)*2.5);
@@ -249,7 +249,7 @@
       align-items:flex-start;
       justify-content:space-between;
       gap: calc(var(--s)*2);
-      background: rgba(5,210,255,.02);
+      background: rgba(210,255,5,.02);
     }
     .panelHead h2{
       margin:0;
@@ -293,7 +293,7 @@
     .kpi:before{
       content:"";
       position:absolute; inset:0;
-      background: linear-gradient(90deg, rgba(5,210,255,.05), transparent 80%);
+      background: linear-gradient(90deg, rgba(210,255,5,.05), transparent 80%);
       pointer-events:none;
     }
     .kLabel{
@@ -311,7 +311,7 @@
       font-size: 24px;
       letter-spacing:-0.5px;
     }
-    .kValue .highlight-val { color: var(--accent); text-shadow: 0 0 20px rgba(5,210,255,.25); }
+    .kValue .highlight-val { color: var(--accent); text-shadow: 0 0 20px rgba(210,255,5,.25); }
     .kMeta{
       margin-top: 8px;
       font-size: 11px;
@@ -401,7 +401,7 @@
     .legendDot{
       width:8px; height:8px; border-radius:2px;
       background: var(--accent);
-      box-shadow: 0 0 8px rgba(5,210,255,.4);
+      box-shadow: 0 0 8px rgba(210,255,5,.4);
       display:inline-block;
       margin-right:8px;
       vertical-align:middle;
@@ -418,17 +418,17 @@
     }
     .flowSvg{ width:100%; height:180px; display:block; }
     .node{ fill: rgba(38,48,61,.4); stroke: rgba(246,243,234,.1); stroke-width: 1.5; transition: all 0.3s ease; }
-    .node.active{ stroke: var(--accent); filter: drop-shadow(0 0 10px rgba(5,210,255,.15)); }
-    .node.warn { stroke: var(--warm0); filter: drop-shadow(0 0 10px rgba(255,158,5,.15)); }
+    .node.active{ stroke: var(--accent); filter: drop-shadow(0 0 10px rgba(210,255,5,.15)); }
+    .node.warn { stroke: var(--warm0); filter: drop-shadow(0 0 10px rgba(238,213,111,.15)); }
     .node.crit { stroke: var(--danger); filter: drop-shadow(0 0 10px rgba(255,5,66,.2)); }
 
-    .pipe{ stroke: rgba(5,210,255,.15); stroke-width: 2; fill:none; stroke-dasharray: 4 4; }
-    .pipe.active { stroke: rgba(5,210,255,.4); stroke-dasharray: none; }
+    .pipe{ stroke: rgba(210,255,5,.15); stroke-width: 2; fill:none; stroke-dasharray: 4 4; }
+    .pipe.active { stroke: rgba(210,255,5,.4); stroke-dasharray: none; }
 
     .flowLabel{ fill: rgba(246,243,234,.9); font-size: 12px; font-family: var(--head); font-weight: 700; text-transform: uppercase; }
     .flowSub{ fill: rgba(246,243,234,.6); font-size: 10px; font-family: var(--mono); }
 
-    .pulse{ fill: var(--accent); opacity:0; filter: drop-shadow(0 0 8px rgba(5,210,255,.5)); }
+    .pulse{ fill: var(--accent); opacity:0; filter: drop-shadow(0 0 8px rgba(210,255,5,.5)); }
     .pulse.on{ opacity:1; animation: flowMove 1.5s linear infinite; }
 
     @keyframes flowMove{
@@ -449,7 +449,7 @@
     }
     .action:hover {
         background: rgba(38,48,61,.5);
-        border-color: rgba(5,210,255,.2);
+        border-color: rgba(210,255,5,.2);
     }
     .actionTop{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
     .actionTitle{ font-weight: 600; letter-spacing:.2px; font-size: 13px; color: #fff; }
@@ -463,9 +463,9 @@
       color: rgba(246,243,234,.6);
     }
     .conf{
-      border-color: rgba(5,210,255,.3) !important;
-      background: rgba(5,210,255,.1) !important;
-      color: rgba(200,240,255,1);
+      border-color: rgba(210,255,5,.3) !important;
+      background: rgba(210,255,5,.1) !important;
+      color: rgba(246,243,234,.92);
     }
 
     .triggers{
@@ -552,7 +552,7 @@
       align-items:flex-start;
       justify-content:space-between;
       gap:12px;
-      background: rgba(5,210,255,.03);
+      background: rgba(210,255,5,.03);
     }
     .modalHead h3{
       margin:0;
@@ -593,10 +593,10 @@
     /* Highlight pulse */
     .highlight{
       outline: 2px solid var(--accent);
-      box-shadow: 0 0 30px rgba(5,210,255,.2);
+      box-shadow: 0 0 30px rgba(210,255,5,.2);
       animation: flashBorder 1s infinite alternate;
     }
-    @keyframes flashBorder { from{ border-color: rgba(5,210,255,0.2); } to { border-color: rgba(5,210,255,1); } }
+    @keyframes flashBorder { from{ border-color: rgba(210,255,5,0.2); } to { border-color: rgba(210,255,5,1); } }
 
     @media (max-width: 1100px){
       body{ align-items:flex-start; }
@@ -688,9 +688,9 @@
               <svg class="flowSvg" viewBox="0 0 800 120" preserveAspectRatio="xMidYMid meet">
                  <defs>
                    <linearGradient id="pipeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                     <stop offset="0%" style="stop-color:rgba(5,210,255,0.1)" />
-                     <stop offset="50%" style="stop-color:rgba(5,210,255,0.4)" />
-                     <stop offset="100%" style="stop-color:rgba(5,210,255,0.1)" />
+                     <stop offset="0%" style="stop-color:rgba(210,255,5,0.1)" />
+                     <stop offset="50%" style="stop-color:rgba(210,255,5,0.4)" />
+                     <stop offset="100%" style="stop-color:rgba(210,255,5,0.1)" />
                    </linearGradient>
                  </defs>
 
@@ -1084,7 +1084,7 @@
       ctx.stroke();
 
       // Line
-      ctx.strokeStyle = state.malfunctionMode ? "#ff0542" : "#05d2ff";
+      ctx.strokeStyle = state.malfunctionMode ? "#ff0542" : "#D2FF05";
       ctx.lineWidth = 3;
       ctx.lineJoin = "round";
       ctx.shadowColor = ctx.strokeStyle;
