@@ -3,37 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Veralogix — Smart Lab Integration Monitor (Mock Showcase)</title>
+  <title>Neurologix AI — Smart Lab Integration Monitor</title>
   <style>
     :root{
-      /* ===== STYLE TOKENS (DO NOT CHANGE) ===== */
-      --bg0:#0B0E15;
-      --bg1:#1D262B;
-      --bg2:#303E47;
-      --bg3:#465C6B;
+      /* ===== STYLE TOKENS ===== */
+      --bg0:#05070a;
+      --bg1:#0f131a;
+      --bg2:#1a212b;
+      --bg3:#26303d;
 
       --text:#F6F3EA;
 
-      --accent:#D2FF05;      /* primary */
-      --accent2:#9AD153;     /* secondary */
-      --deep:#527D2D;        /* deep green */
-      --warm0:#B8901F;       /* warm highlight (rare) */
+      --accent:#D2FF05;      /* Neon Green */
+      --accent2:#9AD153;     /* Secondary Green */
+      --deep:#527D2D;        /* Deep Green */
+      --warm0:#B8901F;       /* Warm Warning */
       --warm1:#EED56F;
+      --danger:#ff0542;      /* Critical/Malfunction (Red preserved for errors) */
 
       /* System */
       --s:8px;               /* 8pt spacing system */
-      --r:18px;              /* radius */
-      --r2:14px;
+      --r:20px;              /* radius */
+      --r2:16px;
 
-      --line: rgba(246,243,234,.10);
+      --line: rgba(246,243,234,.12);
       --line2: rgba(246,243,234,.06);
-      --glass: rgba(29,38,43,.52);
-      --glass2: rgba(48,62,71,.40);
+      --glass: rgba(15,19,26,.65);
+      --glass2: rgba(26,33,43,.45);
 
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --head: "Montserrat","Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       --body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      --shadow: 0 14px 34px rgba(0,0,0,.45);
+      --shadow: 0 16px 40px rgba(0,0,0,.60);
+      --glow: 0 0 20px rgba(210, 255, 5, 0.15);
     }
 
     *{box-sizing:border-box}
@@ -43,9 +45,9 @@
       font-family: var(--body);
       color: var(--text);
       background:
-        radial-gradient(1200px 800px at 22% -10%, rgba(210,255,5,.12), transparent 58%),
-        radial-gradient(900px 700px at 80% 0%, rgba(154,209,83,.08), transparent 58%),
-        radial-gradient(900px 700px at 70% 120%, rgba(238,213,111,.06), transparent 60%),
+        radial-gradient(1400px 900px at 20% -10%, rgba(210,255,5,.10), transparent 60%),
+        radial-gradient(1000px 800px at 80% 10%, rgba(154,209,83,.08), transparent 55%),
+        radial-gradient(1000px 800px at 50% 110%, rgba(210,255,5,.05), transparent 60%),
         var(--bg0);
       display:flex;
       align-items:center;
@@ -59,25 +61,25 @@
       aspect-ratio: 16 / 9;
       height: min(900px, 92vh);
       max-height: 92vh;
-      min-height: 620px;
+      min-height: 650px;
       border-radius: calc(var(--r) + 6px);
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(29,38,43,.55), rgba(11,14,21,.88));
+      background: linear-gradient(180deg, rgba(26,33,43,.55), rgba(5,7,10,.92));
       box-shadow: var(--shadow);
       overflow:hidden;
       position:relative;
     }
 
-    /* Subtle HUD ticks */
+    /* Tech grid overlay */
     .frame:before{
       content:"";
       position:absolute; inset:0;
       background:
-        linear-gradient(90deg, rgba(210,255,5,.06) 1px, transparent 1px) 0 0 / 120px 120px,
-        linear-gradient(0deg, rgba(246,243,234,.03) 1px, transparent 1px) 0 0 / 120px 120px;
-      opacity:.25;
+        linear-gradient(90deg, rgba(210,255,5,.03) 1px, transparent 1px) 0 0 / 80px 80px,
+        linear-gradient(0deg, rgba(246,243,234,.02) 1px, transparent 1px) 0 0 / 80px 80px;
       pointer-events:none;
       mix-blend-mode: screen;
+      z-index: 0;
     }
 
     .app{
@@ -85,6 +87,7 @@
       display:flex;
       flex-direction:column;
       position:relative;
+      z-index: 1;
     }
 
     /* ===== Top bar ===== */
@@ -95,8 +98,8 @@
       gap: calc(var(--s)*2);
       padding: calc(var(--s)*2) calc(var(--s)*3);
       border-bottom: 1px solid var(--line2);
-      background: rgba(11,14,21,.45);
-      backdrop-filter: blur(10px);
+      background: rgba(5,7,10,.55);
+      backdrop-filter: blur(12px);
     }
 
     .title{
@@ -108,33 +111,37 @@
     .title h1{
       margin:0;
       font-family: var(--head);
-      font-weight: 900;
-      letter-spacing:.2px;
-      font-size: 18px;
+      font-weight: 800;
+      letter-spacing:.5px;
+      font-size: 20px;
       display:flex;
       align-items:center;
       gap: calc(var(--s)*1);
+      color: var(--text);
     }
-    .limecheck{
-      width:12px; height:12px;
+    .logo-icon{
+      width: 24px; height: 24px;
+      background: var(--accent);
+      mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/></svg>') no-repeat center;
+      mask-size: contain;
+      -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/></svg>') no-repeat center;
+      -webkit-mask-size: contain;
+    }
+    .ai-badge {
+      font-size: 10px;
+      background: rgba(210, 255, 5, 0.15);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 2px 6px;
       border-radius: 4px;
-      background: rgba(210,255,5,.16);
-      border:1px solid rgba(210,255,5,.45);
-      position:relative;
-      box-shadow: 0 0 0 6px rgba(210,255,5,.06);
-    }
-    .limecheck:after{
-      content:"";
-      position:absolute;
-      left:3px; top:3px;
-      width:6px; height:3px;
-      border-left:2px solid var(--accent);
-      border-bottom:2px solid var(--accent);
-      transform: rotate(-45deg);
+      margin-left: 8px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     .subtitle{
       font-size: 12px;
-      color: rgba(246,243,234,.72);
+      color: rgba(246,243,234,.60);
       font-family: var(--mono);
       letter-spacing:.2px;
     }
@@ -150,12 +157,13 @@
     .select, .btn{
       border-radius: var(--r2);
       border: 1px solid var(--line);
-      background: rgba(29,38,43,.45);
+      background: rgba(26,33,43,.55);
       color: var(--text);
-      padding: 10px 12px;
+      padding: 10px 14px;
       font-size: 12px;
       cursor:pointer;
       outline:none;
+      transition: all .2s ease;
     }
     .select{
       font-family: var(--mono);
@@ -166,19 +174,28 @@
       align-items:center;
       gap:10px;
       user-select:none;
-      transition: transform .12s ease, border-color .12s ease, background .12s ease;
       white-space:nowrap;
+      font-weight: 500;
     }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(210,255,5,.35); background: rgba(48,62,71,.50); }
-    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(210,255,5,.4); background: rgba(210,255,5,.08); }
+    .btn:active{ transform: translateY(0px) scale(.98); }
 
     .btn.primary{
-      border-color: rgba(210,255,5,.45);
-      background: linear-gradient(180deg, rgba(210,255,5,.14), rgba(29,38,43,.40));
+      border-color: rgba(210,255,5,.5);
+      background: linear-gradient(135deg, rgba(210,255,5,.15), rgba(26,33,43,.6));
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(210,255,5,.12);
     }
-    .btn.ghost{
-      border-color: rgba(246,243,234,.14);
-      background: rgba(29,38,43,.35);
+    .btn.primary:hover {
+      box-shadow: 0 4px 16px rgba(210,255,5,.25);
+    }
+    .btn.danger{
+        border-color: rgba(255,5,66,.5);
+        background: linear-gradient(135deg, rgba(255,5,66,.15), rgba(26,33,43,.6));
+    }
+    .btn.danger:hover {
+        background: rgba(255,5,66,.2);
+        box-shadow: 0 4px 16px rgba(255,5,66,.2);
     }
 
     .badge{
@@ -187,24 +204,24 @@
       gap:8px;
       font-family: var(--mono);
       font-size: 11px;
-      padding: 8px 10px;
+      padding: 8px 12px;
       border-radius: 999px;
       border: 1px solid var(--line);
-      background: rgba(29,38,43,.38);
+      background: rgba(26,33,43,.45);
     }
     .pillDot{
       width:8px; height:8px; border-radius:50%;
       background: var(--accent2);
-      box-shadow: 0 0 0 6px rgba(154,209,83,.08);
+      box-shadow: 0 0 0 4px rgba(83,209,182,.1);
     }
-    .pillDot.warn{ background: var(--warm1); box-shadow: 0 0 0 6px rgba(238,213,111,.08); }
-    .pillDot.crit{ background: var(--warm0); box-shadow: 0 0 0 6px rgba(184,144,31,.10); }
+    .pillDot.warn{ background: var(--warm1); box-shadow: 0 0 0 4px rgba(255,206,111,.1); }
+    .pillDot.crit{ background: var(--danger); box-shadow: 0 0 0 4px rgba(255,5,66,.15); }
 
     /* ===== 12-column grid layout ===== */
     .grid12{
       display:grid;
       grid-template-columns: repeat(12, 1fr);
-      gap: calc(var(--s)*1.5);
+      gap: calc(var(--s)*2);
       padding: calc(var(--s)*2) calc(var(--s)*3);
       flex:1;
       min-height:0;
@@ -214,36 +231,43 @@
       border-radius: var(--r);
       border: 1px solid var(--line);
       background: var(--glass);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 28px rgba(0,0,0,.30);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
       overflow:hidden;
       min-height:0;
       display:flex;
       flex-direction:column;
+      transition: border-color 0.3s ease;
+    }
+    .panel:hover {
+        border-color: rgba(210,255,5,.2);
     }
     .panelHead{
-      padding: calc(var(--s)*1.75) calc(var(--s)*2);
+      padding: calc(var(--s)*2) calc(var(--s)*2.5);
       border-bottom: 1px solid var(--line2);
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
       gap: calc(var(--s)*2);
+      background: rgba(210,255,5,.02);
     }
     .panelHead h2{
       margin:0;
       font-family: var(--head);
-      font-weight: 900;
-      font-size: 13px;
-      letter-spacing:.2px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing:.5px;
+      text-transform: uppercase;
+      color: var(--accent);
     }
     .panelHead p{
       margin:6px 0 0;
-      color: rgba(246,243,234,.72);
+      color: rgba(246,243,234,.60);
       font-size: 12px;
-      line-height:1.35;
+      line-height:1.4;
     }
     .panelBody{
-      padding: calc(var(--s)*2);
+      padding: calc(var(--s)*2.5);
       overflow:auto;
       min-height:0;
     }
@@ -256,40 +280,42 @@
 
     .kpis{
       display:grid;
-      gap: calc(var(--s)*1.25);
+      gap: calc(var(--s)*1.5);
     }
     .kpi{
       border-radius: var(--r2);
       border: 1px solid var(--line);
-      background: rgba(48,62,71,.34);
+      background: rgba(26,33,43,.4);
       padding: calc(var(--s)*1.5);
       position:relative;
       overflow:hidden;
     }
     .kpi:before{
       content:"";
-      position:absolute; inset:-2px;
-      background: linear-gradient(90deg, rgba(210,255,5,.12), transparent 55%);
-      opacity:.35;
+      position:absolute; inset:0;
+      background: linear-gradient(90deg, rgba(210,255,5,.05), transparent 80%);
       pointer-events:none;
     }
     .kLabel{
       font-size: 11px;
-      letter-spacing:.2px;
-      color: rgba(246,243,234,.74);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(246,243,234,.6);
+      font-family: var(--head);
+      font-weight: 600;
     }
     .kValue{
-      margin-top: 8px;
-      font-family: var(--head);
-      font-weight: 900;
-      font-size: 22px;
-      letter-spacing:.2px;
+      margin-top: 6px;
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 24px;
+      letter-spacing:-0.5px;
     }
-    .kValue .lime{ color: var(--accent); text-shadow: 0 0 18px rgba(210,255,5,.18); }
+    .kValue .highlight-val { color: var(--accent); text-shadow: 0 0 20px rgba(210,255,5,.25); }
     .kMeta{
       margin-top: 8px;
       font-size: 11px;
-      color: rgba(246,243,234,.70);
+      color: rgba(246,243,234,.5);
       display:flex;
       align-items:center;
       gap:10px;
@@ -297,11 +323,13 @@
       font-family: var(--mono);
     }
     .tag{
-      border:1px solid rgba(246,243,234,.14);
-      background: rgba(11,14,21,.28);
+      border:1px solid rgba(246,243,234,.1);
+      background: rgba(15,19,26,.4);
       padding: 4px 8px;
-      border-radius: 999px;
+      border-radius: 6px;
       white-space:nowrap;
+      font-size: 10px;
+      color: rgba(246,243,234,.8);
     }
 
     /* Connector list */
@@ -313,16 +341,21 @@
       gap:12px;
       padding: 10px 12px;
       border-radius: var(--r2);
-      border:1px solid rgba(246,243,234,.10);
-      background: rgba(11,14,21,.28);
+      border:1px solid rgba(246,243,234,.08);
+      background: rgba(15,19,26,.4);
       font-size: 12px;
+      transition: background 0.2s;
+    }
+    .connRow.malfunction {
+        border-color: rgba(255,5,66,.4);
+        background: rgba(255,5,66,.08);
     }
     .connLeft{
       display:flex; flex-direction:column; gap:4px;
       min-width:0;
     }
     .connName{
-      font-weight: 650;
+      font-weight: 600;
       overflow:hidden;
       text-overflow:ellipsis;
       white-space:nowrap;
@@ -330,26 +363,26 @@
     }
     .connMeta{
       font-family: var(--mono);
-      font-size: 11px;
-      color: rgba(246,243,234,.70);
+      font-size: 10px;
+      color: rgba(246,243,234,.5);
     }
 
     .state{
       display:inline-flex; align-items:center; gap:8px;
       font-family: var(--mono);
-      font-size: 11px;
-      padding: 6px 10px;
+      font-size: 10px;
+      padding: 4px 8px;
       border-radius: 999px;
-      border: 1px solid rgba(246,243,234,.14);
-      background: rgba(29,38,43,.35);
+      border: 1px solid rgba(246,243,234,.1);
+      background: rgba(26,33,43,.5);
       white-space:nowrap;
     }
 
     /* Chart */
     .chartWrap{
       border-radius: var(--r2);
-      border:1px solid rgba(246,243,234,.12);
-      background: rgba(11,14,21,.28);
+      border:1px solid rgba(246,243,234,.08);
+      background: rgba(15,19,26,.3);
       padding: calc(var(--s)*1.5);
       position:relative;
       overflow:hidden;
@@ -362,14 +395,13 @@
       gap:12px;
       flex-wrap:wrap;
       font-family: var(--mono);
-      font-size: 11px;
-      color: rgba(246,243,234,.72);
+      font-size: 10px;
+      color: rgba(246,243,234,.5);
     }
     .legendDot{
-      width:10px; height:10px; border-radius:4px;
-      background: rgba(210,255,5,.22);
-      border:1px solid rgba(210,255,5,.55);
-      box-shadow: 0 0 0 6px rgba(210,255,5,.06);
+      width:8px; height:8px; border-radius:2px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(210,255,5,.4);
       display:inline-block;
       margin-right:8px;
       vertical-align:middle;
@@ -377,49 +409,62 @@
 
     /* Data path */
     .flowWrap{
-      margin-top: calc(var(--s)*1.5);
+      margin-top: calc(var(--s)*2);
       border-radius: var(--r2);
-      border:1px solid rgba(246,243,234,.12);
-      background: rgba(11,14,21,.24);
+      border:1px solid rgba(246,243,234,.08);
+      background: rgba(15,19,26,.3);
       padding: calc(var(--s)*1.5);
+      position: relative;
     }
-    .flowSvg{ width:100%; height:150px; display:block; }
-    .node{ fill: rgba(48,62,71,.38); stroke: rgba(246,243,234,.14); stroke-width: 1; }
-    .node.active{ stroke: rgba(210,255,5,.50); filter: drop-shadow(0 0 14px rgba(210,255,5,.16)); }
-    .pipe{ stroke: rgba(210,255,5,.22); stroke-width: 2.2; fill:none; }
-    .flowLabel{ fill: rgba(246,243,234,.88); font-size: 11px; font-family: var(--body); }
-    .flowSub{ fill: rgba(246,243,234,.70); font-size: 10px; font-family: var(--mono); }
-    .pulse{ fill: rgba(210,255,5,.92); opacity:0; filter: drop-shadow(0 0 10px rgba(210,255,5,.25)); }
-    .pulse.on{ opacity:1; animation: pulse 1.4s linear infinite; }
-    @keyframes pulse{
-      0%{ transform: translateX(0px); opacity:0; }
-      10%{ opacity:1; }
-      90%{ opacity:1; }
-      100%{ transform: translateX(560px); opacity:0; }
+    .flowSvg{ width:100%; height:180px; display:block; }
+    .node{ fill: rgba(38,48,61,.4); stroke: rgba(246,243,234,.1); stroke-width: 1.5; transition: all 0.3s ease; }
+    .node.active{ stroke: var(--accent); filter: drop-shadow(0 0 10px rgba(210,255,5,.15)); }
+    .node.warn { stroke: var(--warm0); filter: drop-shadow(0 0 10px rgba(238,213,111,.15)); }
+    .node.crit { stroke: var(--danger); filter: drop-shadow(0 0 10px rgba(255,5,66,.2)); }
+
+    .pipe{ stroke: rgba(210,255,5,.15); stroke-width: 2; fill:none; stroke-dasharray: 4 4; }
+    .pipe.active { stroke: rgba(210,255,5,.4); stroke-dasharray: none; }
+
+    .flowLabel{ fill: rgba(246,243,234,.9); font-size: 12px; font-family: var(--head); font-weight: 700; text-transform: uppercase; }
+    .flowSub{ fill: rgba(246,243,234,.6); font-size: 10px; font-family: var(--mono); }
+
+    .pulse{ fill: var(--accent); opacity:0; filter: drop-shadow(0 0 8px rgba(210,255,5,.5)); }
+    .pulse.on{ opacity:1; animation: flowMove 1.5s linear infinite; }
+
+    @keyframes flowMove{
+      0%{ offset-distance: 0%; opacity: 0; }
+      10%{ opacity: 1; }
+      90%{ opacity: 1; }
+      100%{ offset-distance: 100%; opacity: 0; }
     }
 
     /* Actions */
     .actions{ display:grid; gap: calc(var(--s)*1.25); }
     .action{
       border-radius: var(--r2);
-      border: 1px solid rgba(246,243,234,.12);
-      background: rgba(48,62,71,.30);
+      border: 1px solid rgba(246,243,234,.1);
+      background: rgba(38,48,61,.3);
       padding: calc(var(--s)*1.5);
+      transition: all 0.2s;
+    }
+    .action:hover {
+        background: rgba(38,48,61,.5);
+        border-color: rgba(210,255,5,.2);
     }
     .actionTop{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
-    .actionTitle{ font-weight: 800; letter-spacing:.2px; }
+    .actionTitle{ font-weight: 600; letter-spacing:.2px; font-size: 13px; color: #fff; }
     .actionMeta{
       margin-top: 8px;
       display:flex;
       gap:8px;
       flex-wrap:wrap;
       font-family: var(--mono);
-      font-size: 11px;
-      color: rgba(246,243,234,.72);
+      font-size: 10px;
+      color: rgba(246,243,234,.6);
     }
     .conf{
-      border-color: rgba(210,255,5,.35) !important;
-      background: rgba(210,255,5,.10) !important;
+      border-color: rgba(210,255,5,.3) !important;
+      background: rgba(210,255,5,.1) !important;
       color: rgba(246,243,234,.92);
     }
 
@@ -433,113 +478,125 @@
     /* Table */
     table{ width:100%; border-collapse:collapse; }
     th,td{
-      padding: 10px 8px;
+      padding: 12px 10px;
       border-bottom: 1px solid var(--line2);
       font-size: 12px;
       text-align:left;
       vertical-align:top;
     }
     th{
-      font-size: 11px;
-      color: rgba(246,243,234,.70);
-      font-family: var(--mono);
-      letter-spacing:.2px;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: rgba(246,243,234,.5);
+      font-family: var(--head);
+      font-weight: 600;
+      letter-spacing: 1px;
     }
+    td { color: rgba(246,243,234,.8); }
 
     /* Toasts */
     .toasts{
       position:absolute;
-      right: calc(var(--s)*2);
-      bottom: calc(var(--s)*2);
+      right: calc(var(--s)*3);
+      bottom: calc(var(--s)*3);
       display:flex;
       flex-direction:column;
-      gap: calc(var(--s)*1);
+      gap: calc(var(--s)*1.5);
       pointer-events:none;
-      max-width: 420px;
+      max-width: 400px;
       z-index: 50;
     }
     .toast{
       pointer-events:auto;
       border-radius: var(--r2);
-      border:1px solid rgba(246,243,234,.14);
-      background: rgba(29,38,43,.72);
+      border:1px solid rgba(246,243,234,.1);
+      background: rgba(15,19,26,.85);
+      backdrop-filter: blur(12px);
       box-shadow: var(--shadow);
-      padding: 12px;
-      animation: pop .18s ease-out;
+      padding: 16px;
+      animation: pop .25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-left: 3px solid var(--accent);
     }
-    @keyframes pop{ from{ transform: translateY(8px); opacity:0 } to{ transform: translateY(0); opacity:1 } }
-    .toastTitle{ font-weight: 800; }
-    .toastMsg{ margin-top: 6px; font-size: 12px; color: rgba(246,243,234,.78); line-height:1.35; }
-    .toastTime{ margin-top: 8px; font-family: var(--mono); font-size: 11px; color: rgba(246,243,234,.70); }
+    .toast.crit { border-left-color: var(--danger); }
+    .toast.warn { border-left-color: var(--warm0); }
 
-    /* Modal (Smart Lab UI mock) */
+    @keyframes pop{ from{ transform: translateY(12px); opacity:0 } to{ transform: translateY(0); opacity:1 } }
+    .toastTitle{ font-weight: 700; font-size: 13px; margin-bottom: 4px;}
+    .toastMsg{ font-size: 12px; color: rgba(246,243,234,.7); line-height:1.4; }
+    .toastTime{ margin-top: 8px; font-family: var(--mono); font-size: 10px; color: rgba(246,243,234,.4); }
+
+    /* Modal */
     .modalBack{
       position:absolute; inset:0;
-      background: rgba(11,14,21,.66);
+      background: rgba(5,7,10,.8);
       display:none;
       align-items:center;
       justify-content:center;
       padding: calc(var(--s)*3);
       z-index: 60;
+      backdrop-filter: blur(4px);
     }
     .modalBack.on{ display:flex; }
     .modal{
       width: min(980px, 92vw);
       border-radius: calc(var(--r) + 6px);
-      border: 1px solid rgba(246,243,234,.14);
-      background: rgba(29,38,43,.82);
-      backdrop-filter: blur(12px);
+      border: 1px solid rgba(246,243,234,.1);
+      background: #151a21;
       box-shadow: var(--shadow);
       overflow:hidden;
     }
     .modalHead{
-      padding: calc(var(--s)*2) calc(var(--s)*2.5);
+      padding: calc(var(--s)*2.5);
       border-bottom: 1px solid var(--line2);
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
       gap:12px;
+      background: rgba(210,255,5,.03);
     }
     .modalHead h3{
       margin:0;
       font-family: var(--head);
-      font-weight: 900;
-      font-size: 14px;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
     }
     .modalBody{
-      padding: calc(var(--s)*2) calc(var(--s)*2.5);
+      padding: calc(var(--s)*3);
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: calc(var(--s)*2);
+      gap: calc(var(--s)*3);
     }
     .mini{
       border-radius: var(--r2);
-      border:1px solid rgba(246,243,234,.12);
-      background: rgba(11,14,21,.26);
-      padding: calc(var(--s)*1.5);
+      border:1px solid rgba(246,243,234,.1);
+      background: rgba(26,33,43,.3);
+      padding: calc(var(--s)*2);
     }
-    .miniTitle{ font-family: var(--mono); font-size:11px; color: rgba(246,243,234,.72); }
-    .miniBig{ margin-top: 8px; font-family: var(--head); font-weight: 900; font-size: 18px; }
+    .miniTitle{ font-family: var(--mono); font-size:10px; color: rgba(246,243,234,.5); text-transform: uppercase; letter-spacing: 1px;}
+    .miniBig{ margin-top: 8px; font-family: var(--head); font-weight: 700; font-size: 18px; color: var(--accent); }
     .progress{
-      margin-top: 10px;
-      height: 10px;
+      margin-top: 12px;
+      height: 8px;
       border-radius: 999px;
-      border:1px solid rgba(246,243,234,.12);
-      background: rgba(48,62,71,.28);
+      background: rgba(255,255,255,.05);
       overflow:hidden;
     }
     .progress > div{
       height:100%;
       width:0%;
-      background: linear-gradient(90deg, rgba(154,209,83,.85), rgba(210,255,5,.85));
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
       transition: width .25s ease;
     }
 
-    /* Walkthrough highlight */
+    /* Highlight pulse */
     .highlight{
-      outline: 2px solid rgba(210,255,5,.55);
-      box-shadow: 0 0 0 8px rgba(210,255,5,.08);
+      outline: 2px solid var(--accent);
+      box-shadow: 0 0 30px rgba(210,255,5,.2);
+      animation: flashBorder 1s infinite alternate;
     }
+    @keyframes flashBorder { from{ border-color: rgba(210,255,5,0.2); } to { border-color: rgba(210,255,5,1); } }
 
     @media (max-width: 1100px){
       body{ align-items:flex-start; }
@@ -551,52 +608,10 @@
     }
 
     @media (max-width: 900px){
-      .topbar{
-        flex-direction:column;
-        align-items:flex-start;
-      }
+      .topbar{ flex-direction:column; align-items:flex-start; }
       .title{ min-width:0; }
-      .controls{
-        width:100%;
-        justify-content:flex-start;
-      }
+      .controls{ width:100%; justify-content:flex-start; }
       .controls > *{ flex: 1 1 200px; }
-      .badge{ justify-content:space-between; }
-      .panelHead{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .panelBody{ overflow-x:auto; }
-      .toasts{
-        left: calc(var(--s)*2);
-        right: calc(var(--s)*2);
-        max-width:none;
-      }
-    }
-
-    @media (max-width: 640px){
-      body{ padding: calc(var(--s)*1.5); }
-      .frame{
-        width:100%;
-        border-radius: calc(var(--r));
-      }
-      .topbar{
-        padding: calc(var(--s)*1.5);
-        gap: calc(var(--s)*1.5);
-      }
-      .title h1{ font-size: 16px; }
-      .subtitle{ font-size: 11px; }
-      .controls{
-        flex-direction:column;
-        align-items:stretch;
-      }
-      .controls > *{ width:100%; }
-      .grid12{ padding: calc(var(--s)*1.5); }
-      canvas{ height: 200px; }
-      .flowSvg{ height: 130px; }
-      .modalBack{ padding: calc(var(--s)*1.5); }
-      .modalHead, .modalBody{ padding: calc(var(--s)*1.5); }
-      .toasts{ left: calc(var(--s)*1.5); right: calc(var(--s)*1.5); }
     }
   </style>
 </head>
@@ -608,8 +623,12 @@
       <!-- ===== TOP BAR ===== -->
       <div class="topbar">
         <div class="title">
-          <h1><span class="limecheck"></span><span id="moduleTitle">Smart Lab Integration Monitor</span></h1>
-          <div class="subtitle" id="subtitle">SITE: COLLIERY-01 · MODE: HEALTHY · MAPPING: v1.3</div>
+          <h1>
+            <span class="logo-icon"></span>
+            Neurologix AI
+            <span class="ai-badge">HUB</span>
+          </h1>
+          <div class="subtitle" id="subtitle">Smart Lab Integration Monitor · Quality Gate Active</div>
         </div>
 
         <div class="controls">
@@ -619,21 +638,15 @@
             <option>YARD-03</option>
           </select>
 
-          <select class="select" id="rangeSel" title="Select date range">
-            <option value="24h">Last 24h</option>
-            <option value="7d">Last 7d</option>
-            <option value="30d">Last 30d</option>
-          </select>
-
           <div class="badge" title="Open alerts by severity">
             <span class="pillDot crit" id="critDot"></span><span id="critCount">0</span>
             <span class="pillDot warn"></span><span id="warnCount">0</span>
             <span class="pillDot"></span><span id="infoCount">0</span>
-            <span style="opacity:.8">Open Alerts</span>
+            <span style="opacity:.6">ALERTS</span>
           </div>
 
-          <button class="btn ghost" id="walkBtn" title="Auto-cycles key scenarios">Walkthrough: OFF</button>
-          <button class="btn primary" id="exportBtn" title="Downloads last 50 events + current KPIs (demo)">Export Audit Pack</button>
+          <button class="btn" id="walkBtn">Walkthrough: OFF</button>
+          <button class="btn primary" id="exportBtn">Export Report</button>
         </div>
       </div>
 
@@ -644,18 +657,14 @@
         <section class="panel left" id="leftPanel">
           <div class="panelHead">
             <div>
-              <h2>KPIs</h2>
-              <p>Glanceable, measurable, audit-safe.</p>
+              <h2>Reality Capture</h2>
+              <p>Raw Sensor Streams</p>
             </div>
-            <span class="tag" id="clock">--:--:--</span>
+            <span class="tag" id="connSummary">0/0 online</span>
           </div>
           <div class="panelBody">
             <div class="kpis" id="kpis"></div>
-
-            <div style="margin-top:calc(var(--s)*2); display:flex; justify-content:space-between; gap:10px; align-items:center;">
-              <div style="font-family:var(--head); font-weight:900; font-size:13px;">Connector Status</div>
-              <span class="tag" id="connSummary">0/0 online</span>
-            </div>
+            <div style="margin-top:20px; font-family:var(--head); font-weight:700; font-size:12px; color:rgba(255,255,255,.4); text-transform:uppercase;">Input Connectors</div>
             <div class="connList" id="connList"></div>
           </div>
         </section>
@@ -664,54 +673,70 @@
         <section class="panel center" id="centerPanel">
           <div class="panelHead">
             <div>
-              <h2>Integrity Trend</h2>
-              <p>Composite score from DQ, latency, loss, and mapping confidence.</p>
+              <h2>Smart Lab Monitor</h2>
+              <p>Neurologix AI Quality Gate</p>
             </div>
-            <span class="tag" id="trendTag">live · 1s</span>
+            <span class="tag" id="trendTag">LIVE</span>
           </div>
           <div class="panelBody">
-            <div class="chartWrap">
-              <canvas id="chart" aria-label="Integrity trend chart"></canvas>
-              <div class="chartLegend">
-                <div><span class="legendDot"></span>Integrity score (0–100)</div>
-                <div id="chartMeta">p95: -- ms · events/min: --</div>
+            <div class="flowWrap">
+              <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:12px;">
+                <div style="font-family:var(--head); font-weight:700; font-size:12px; text-transform:uppercase; color:var(--accent);">Data Pipeline Visualization</div>
+                <span class="tag" id="flowMeta">Trustworthy Data Only</span>
               </div>
+
+              <svg class="flowSvg" viewBox="0 0 800 120" preserveAspectRatio="xMidYMid meet">
+                 <defs>
+                   <linearGradient id="pipeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                     <stop offset="0%" style="stop-color:rgba(210,255,5,0.1)" />
+                     <stop offset="50%" style="stop-color:rgba(210,255,5,0.4)" />
+                     <stop offset="100%" style="stop-color:rgba(210,255,5,0.1)" />
+                   </linearGradient>
+                 </defs>
+
+                 <!-- Pipe 1: Sensors -> Lab -->
+                 <path class="pipe" id="pipe1" d="M120 60 L 320 60" />
+
+                 <!-- Pipe 2: Lab -> Hub -->
+                 <path class="pipe" id="pipe2" d="M480 60 L 680 60" />
+
+                 <!-- Node 1: Sensors -->
+                 <g id="nSensors" transform="translate(20, 30)">
+                    <rect class="node" rx="12" ry="12" width="100" height="60" />
+                    <text class="flowLabel" x="50" y="26" text-anchor="middle">Sensors</text>
+                    <text class="flowSub" x="50" y="44" text-anchor="middle">Capture Reality</text>
+                 </g>
+
+                 <!-- Node 2: Smart Lab (The Monitor) -->
+                 <g id="nSmartLab" transform="translate(320, 15)">
+                    <rect class="node" rx="16" ry="16" width="160" height="90" stroke-width="2" />
+                    <text class="flowLabel" x="80" y="38" text-anchor="middle" fill="#fff" style="font-size:14px;">Smart Lab</text>
+                    <text class="flowSub" x="80" y="60" text-anchor="middle" id="labStatus">NEUROLOGIX AI</text>
+                    <rect x="65" y="68" width="30" height="4" fill="var(--accent)" rx="2" style="opacity:0.6" />
+                 </g>
+
+                 <!-- Node 3: Smart Hub -->
+                 <g id="nSmartHub" transform="translate(680, 30)">
+                    <rect class="node" rx="12" ry="12" width="100" height="60" />
+                    <text class="flowLabel" x="50" y="26" text-anchor="middle">Smart Hub</text>
+                    <text class="flowSub" x="50" y="44" text-anchor="middle">Decisions</text>
+                 </g>
+
+                 <!-- Pulse Animations -->
+                 <circle class="pulse" id="pulse1" r="5">
+                    <animateMotion dur="1.5s" repeatCount="indefinite" path="M120 60 L 320 60" />
+                 </circle>
+                 <circle class="pulse" id="pulse2" r="5">
+                    <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.75s" path="M480 60 L 680 60" />
+                 </circle>
+              </svg>
             </div>
 
-            <div class="flowWrap" style="margin-top:calc(var(--s)*2);">
-              <div style="display:flex; justify-content:space-between; gap:10px; align-items:center;">
-                <div style="font-family:var(--head); font-weight:900; font-size:13px;">Data Path</div>
-                <span class="tag" id="flowMeta">Sensor → Smart Lab</span>
-              </div>
-
-              <svg class="flowSvg" viewBox="0 0 860 150" preserveAspectRatio="xMidYMid meet" aria-label="Data path visualization">
-                <path class="pipe" d="M120 60 C 190 60, 210 60, 280 60" />
-                <path class="pipe" d="M330 60 C 400 60, 420 60, 490 60" />
-                <path class="pipe" d="M540 60 C 610 60, 630 60, 700 60" />
-
-                <rect class="node" id="nPhysical" x="20" y="30" rx="14" ry="14" width="100" height="60"/>
-                <text class="flowLabel" x="70" y="56" text-anchor="middle">Physical</text>
-                <text class="flowSub" x="70" y="76" text-anchor="middle">Sensors</text>
-
-                <rect class="node" id="nEdge" x="280" y="30" rx="14" ry="14" width="100" height="60"/>
-                <text class="flowLabel" x="330" y="56" text-anchor="middle">Edge</text>
-                <text class="flowSub" x="330" y="76" text-anchor="middle">Gateways</text>
-
-                <rect class="node" id="nNetwork" x="490" y="30" rx="14" ry="14" width="100" height="60"/>
-                <text class="flowLabel" x="540" y="56" text-anchor="middle">Network</text>
-                <text class="flowSub" x="540" y="76" text-anchor="middle" id="netState">ONLINE</text>
-
-                <rect class="node" id="nSmartLab" x="700" y="30" rx="14" ry="14" width="140" height="60"/>
-                <text class="flowLabel" x="770" y="54" text-anchor="middle">Smart Lab</text>
-                <text class="flowSub" x="770" y="76" text-anchor="middle" id="mapVersion">v1.3</text>
-
-                <circle class="pulse" id="pulseA" cx="120" cy="60" r="5"></circle>
-              </svg>
-
-              <div style="margin-top:calc(var(--s)*1.25); display:flex; gap:10px; flex-wrap:wrap; font-family:var(--mono); font-size:11px; color:rgba(246,243,234,.72);">
-                <span class="tag" id="bufferTag">Edge buffer: -- msgs</span>
-                <span class="tag" id="dqTag">DQ: --%</span>
-                <span class="tag" id="lossTag">Loss: --%</span>
+            <div class="chartWrap" style="margin-top:20px;">
+              <canvas id="chart"></canvas>
+              <div class="chartLegend">
+                <div><span class="legendDot"></span>Integrity Confidence Score</div>
+                <div id="chartMeta">p95: -- ms</div>
               </div>
             </div>
           </div>
@@ -721,26 +746,19 @@
         <section class="panel right" id="rightPanel">
           <div class="panelHead">
             <div>
-              <h2>Recommended Actions</h2>
-              <p>Owner, impact, confidence. No vibes.</p>
+              <h2>Run The Business</h2>
+              <p>Actionable Insights</p>
             </div>
-            <span class="tag" id="modeTag">MODE: HEALTHY</span>
+            <span class="tag" id="modeTag">HEALTHY</span>
           </div>
           <div class="panelBody">
             <div class="actions" id="actions"></div>
 
-            <div style="margin-top:calc(var(--s)*2); display:flex; justify-content:space-between; gap:10px; align-items:center;">
-              <div style="font-family:var(--head); font-weight:900; font-size:13px;">EXCO Triggers</div>
-              <span class="tag">demo</span>
-            </div>
+            <div style="margin-top:24px; font-family:var(--head); font-weight:700; font-size:12px; color:rgba(255,255,255,.4); text-transform:uppercase;">Scenarios</div>
             <div class="triggers">
-              <button class="btn" id="tOutage" title="Simulate uplink outage and buffering">Network Outage <span class="tag">CRIT</span></button>
-              <button class="btn" id="tDust" title="Simulate environmental exceedance">Dust Spike <span class="tag">WARN</span></button>
-              <button class="btn primary" id="tCal" title="Open Smart Lab calibration workflow">Run Calibration <span class="tag">LAB</span></button>
-            </div>
-
-            <div style="margin-top:calc(var(--s)*2);">
-              <button class="btn ghost" id="openLab" title="Operator-facing Smart Lab UI mock">Open Smart Lab UI</button>
+              <button class="btn danger" id="tMalfunction" title="Simulate sensor failure">Simulate Sensor Malfunction <span class="tag">TEST</span></button>
+              <button class="btn" id="tDust" title="Simulate environmental exceedance">Dust Exceedance <span class="tag">WARN</span></button>
+              <button class="btn primary" id="tCal" title="Open calibration">Calibration <span class="tag">AI</span></button>
             </div>
           </div>
         </section>
@@ -749,27 +767,21 @@
         <section class="panel bottom" id="bottomPanel">
           <div class="panelHead">
             <div>
-              <h2>Audit / Event Log</h2>
-              <p>Timestamp · Asset/Operator · Event · Status</p>
+              <h2>Event Log</h2>
+              <p>System Audits & Alerts</p>
             </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-              <select class="select" id="logFilter" title="Filter by severity">
-                <option value="all">Severity: All</option>
-                <option value="crit">Severity: Critical</option>
-                <option value="warn">Severity: Warning</option>
-                <option value="info">Severity: Info</option>
-              </select>
-              <button class="btn" id="clearAlerts" title="Marks all alerts resolved (demo)">Resolve All</button>
+            <div style="display:flex; gap:10px;">
+                <button class="btn" id="clearAlerts">Acknowledge All</button>
             </div>
           </div>
           <div class="panelBody">
             <table aria-label="Audit log table">
               <thead>
                 <tr>
-                  <th style="width:170px;">Timestamp</th>
-                  <th style="width:220px;">Asset / Operator</th>
-                  <th>Event</th>
-                  <th style="width:140px;">Status</th>
+                  <th style="width:140px;">Time</th>
+                  <th style="width:180px;">Source</th>
+                  <th>Event Description</th>
+                  <th style="width:120px;">Status</th>
                 </tr>
               </thead>
               <tbody id="logBody"></tbody>
@@ -782,55 +794,40 @@
       <!-- Toasts -->
       <div class="toasts" id="toasts"></div>
 
-      <!-- Smart Lab Modal -->
-      <div class="modalBack" id="modalBack" role="dialog" aria-modal="true" aria-label="Smart Lab UI">
+      <!-- Modal -->
+      <div class="modalBack" id="modalBack">
         <div class="modal">
           <div class="modalHead">
             <div>
-              <h3>Smart Lab UI (Mock)</h3>
-              <div style="margin-top:6px; font-family:var(--mono); font-size:11px; color:rgba(246,243,234,.72);" id="modalSub">
-                Provision → Calibrate → Publish Mapping → Improve DQ
-              </div>
+              <h3>Neurologix AI Calibration</h3>
+              <div style="margin-top:4px; font-size:12px; color:rgba(255,255,255,.5);">Optimize Data Quality Mappings</div>
             </div>
             <button class="btn" id="closeModal">Close</button>
           </div>
 
           <div class="modalBody">
             <div class="mini">
-              <div class="miniTitle">Calibration pack</div>
-              <div class="miniBig">Dust + Belt Scale Verification</div>
-              <div style="margin-top:10px; color:rgba(246,243,234,.78); font-size:12px; line-height:1.35;">
-                Produces a mapping bump and improves DQ. Adds a signed audit entry (demo).
-              </div>
-
+              <div class="miniTitle">Optimization Routine</div>
+              <div class="miniBig">Drift Correction</div>
+              <p style="font-size:12px; color:rgba(255,255,255,.6); margin-top:8px;">
+                  Analysis of last 5,000 datapoints suggests a +1.2% bias in dust sensors.
+                  Applying correction will restore integrity score > 98.
+              </p>
               <div class="progress"><div id="calBar"></div></div>
-              <div style="margin-top:10px; font-family:var(--mono); font-size:11px; color:rgba(246,243,234,.72);" id="calMeta">
-                step=1 · progress=0% · result=pending
+              <div style="margin-top:10px; font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.5);" id="calMeta">
+                Waiting to start...
               </div>
-
-              <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="btn primary" id="startCal">Start calibration</button>
-                <button class="btn ghost" id="publishMap">Publish mapping</button>
+              <div style="margin-top:16px;">
+                <button class="btn primary" id="startCal">Execute Calibration</button>
               </div>
             </div>
 
             <div class="mini">
-              <div class="miniTitle">Mapping rules (mock)</div>
-              <div class="miniBig">Normalization</div>
-              <table style="margin-top:12px; width:100%; border-collapse:collapse;">
-                <thead>
-                  <tr>
-                    <th style="text-align:left; font-size:11px; font-family:var(--mono); color:rgba(246,243,234,.72); border-bottom:1px solid rgba(246,243,234,.08); padding:8px 6px;">Raw</th>
-                    <th style="text-align:left; font-size:11px; font-family:var(--mono); color:rgba(246,243,234,.72); border-bottom:1px solid rgba(246,243,234,.08); padding:8px 6px;">Maps to</th>
-                    <th style="text-align:left; font-size:11px; font-family:var(--mono); color:rgba(246,243,234,.72); border-bottom:1px solid rgba(246,243,234,.08); padding:8px 6px;">Transform</th>
-                  </tr>
-                </thead>
+              <div class="miniTitle">Active Rules</div>
+              <div class="miniBig">Normalization v1.3</div>
+              <table style="margin-top:12px;">
                 <tbody id="rulesBody"></tbody>
               </table>
-
-              <div style="margin-top:12px; font-family:var(--mono); font-size:11px; color:rgba(246,243,234,.72);">
-                Current mapping: <span class="tag" id="mapTag">v1.3</span>
-              </div>
             </div>
           </div>
         </div>
@@ -841,706 +838,336 @@
 
 <script>
 (() => {
-  /* ===== Mock Showcase App (Offline) =====
-     Demonstrates: connectors → sensor streams → data path → alerts → actions → audit log → Smart Lab.
-     No external libs. Realistic-but-fabricated data. */
-
-  const MODULE_NAME = "Smart Lab Integration Monitor";
+  /* ===== Neurologix AI Showcase ===== */
 
   const $ = (s, el=document) => el.querySelector(s);
-  const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
-  const clamp = (n,a,b) => Math.max(a, Math.min(b,n));
   const now = () => Date.now();
-
   const fmt = {
     int: (n) => Math.round(n).toLocaleString(),
     one: (n) => (Math.round(n*10)/10).toLocaleString(),
-    pct: (n) => `${(Math.round(n*10)/10)}%`,
     time: (d=new Date()) => d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"}),
-    ts: (d=new Date()) => d.toLocaleString([], {year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit", second:"2-digit"})
   };
 
-  // deterministic-ish random
-  let seed = 0xC0FFEE;
-  const rand = () => {
-    seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5;
-    return (seed >>> 0) / 4294967296;
-  };
-  const noise = (n=1) => (rand()*2 - 1) * n;
-
-  // ===== State =====
+  // State
   const state = {
     site: "COLLIERY-01",
-    range: "24h",
+    malfunctionMode: false,
+    malfunctioningConnectorId: null,
 
-    network: { state: "online", p95: 160, loss: 0.2, lastFlip: now() },
-
-    mapping: { version: "v1.3", confidence: 92 },
+    integrity: 97.5,
+    epm: 3240,
+    dq: 98.2,
 
     connectors: [
-      { id:"gw-lora-01", name:"LoRaWAN Gateway", state:"online", buffer: 0, err: 0.3 },
-      { id:"gw-plc-01",  name:"PLC/SCADA Gateway", state:"online", buffer: 0, err: 0.2 },
-      { id:"trk-045",    name:"Truck Telemetry (TRK-045)", state:"online", buffer: 0, err: 0.4 },
-      { id:"wx-001",     name:"Weather Station", state:"online", buffer: 0, err: 0.1 },
+      { id:"c1", name:"Dust Sensor A1", state:"online", val: 12 },
+      { id:"c2", name:"Dust Sensor A2", state:"online", val: 11 },
+      { id:"c3", name:"Vibration (Mill)", state:"online", val: 0.4 },
+      { id:"c4", name:"Temp (Bearing)", state:"online", val: 65 },
     ],
 
-    // simulated metrics
-    epm: 2400,       // events per min
-    dq: 94.0,        // %
-    integrity: 93.0, // 0-100
-    edgeBuffer: 0,
-
-    alerts: [],      // {id, ts, sev: crit|warn|info, msg, open}
-    log: [],         // {ts, who, event, status, sev}
-
-    chart: Array.from({length: 90}, (_,i) => 92 + Math.sin(i/8)*1.8 + noise(0.7)),
+    alerts: [],
+    log: [],
+    chart: Array.from({length: 60}, () => 95 + Math.random()*4),
 
     walkthrough: false,
     walkStep: 0,
     walkTimer: null,
 
-    smartlab: { progress: 0, step: 1, result: "pending" },
-
-    rules: [
-      { raw:"payload.tempF", to:"data.tempC", tx:"(F − 32) × 5/9" },
-      { raw:"payload.pressPsi", to:"data.pressKpa", tx:"psi × 6.89476" },
-      { raw:"payload.deviceId", to:"sourceId", tx:"pass-through" }
-    ]
+    lab: { progress: 0, busy: false }
   };
 
-  // ===== UI refs =====
-  $("#moduleTitle").textContent = MODULE_NAME;
-
-  // ===== Helpers =====
-  const id = () => Math.random().toString(16).slice(2);
-
-  function toast(title, msg){
-    const wrap = $("#toasts");
+  // Utils
+  function toast(title, msg, type="info"){
     const el = document.createElement("div");
-    el.className = "toast";
-    el.innerHTML = `
-      <div class="toastTitle">${title}</div>
-      <div class="toastMsg">${msg}</div>
-      <div class="toastTime">${fmt.time()}</div>
-    `;
-    wrap.appendChild(el);
-    setTimeout(() => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(6px)";
-      el.style.transition = "opacity .22s, transform .22s";
-    }, 5200);
-    setTimeout(() => el.remove(), 5600);
+    el.className = `toast ${type}`;
+    el.innerHTML = `<div class="toastTitle">${title}</div><div class="toastMsg">${msg}</div><div class="toastTime">${fmt.time()}</div>`;
+    $("#toasts").appendChild(el);
+    setTimeout(() => { el.style.opacity="0"; el.style.transform="translateY(10px)"; }, 4000);
+    setTimeout(() => el.remove(), 4500);
   }
 
-  function addLog({who, event, status, sev="info"}){
-    state.log.unshift({ ts: fmt.ts(), who, event, status, sev });
-    if(state.log.length > 120) state.log.pop();
+  function addLog(who, event, status){
+    state.log.unshift({ time: fmt.time(), who, event, status });
+    if(state.log.length > 30) state.log.pop();
+    renderLog();
   }
 
-  function addAlert(sev, msg){
-    const a = { id: id(), ts: now(), sev, msg, open: true };
-    state.alerts.unshift(a);
-    addLog({
-      who: sev === "crit" ? "Network/Edge" : sev === "warn" ? "Ops/HSE" : "System",
-      event: msg,
-      status: "OPEN",
-      sev
-    });
-    toast(`${sev.toUpperCase()} Alert`, msg);
+  function addAlert(msg, type="info"){
+    state.alerts.push({ msg, type, time: fmt.time() });
+    toast(type.toUpperCase(), msg, type);
+    addLog("System", msg, "ALERT");
+    renderTop();
   }
 
-  function resolveAll(){
-    state.alerts.forEach(a => a.open = false);
-    addLog({ who:"System", event:"All alerts resolved (demo)", status:"CLOSED", sev:"info" });
-    toast("Resolved", "All alerts marked resolved (demo).");
-  }
+  // Simulation Logic
+  function simulate(){
+    // Random fluctuation
+    state.epm = 3200 + Math.floor(Math.random()*400);
+    state.integrity = Math.min(100, Math.max(80, state.integrity + (Math.random()-0.5)));
 
-  function sevCounts(){
-    const open = state.alerts.filter(a => a.open);
-    return {
-      crit: open.filter(a => a.sev==="crit").length,
-      warn: open.filter(a => a.sev==="warn").length,
-      info: open.filter(a => a.sev==="info").length
-    };
-  }
+    if(state.malfunctionMode){
+        // In malfunction mode, integrity is SLIGHTLY affected but maintained by the "Smart Lab" filter
+        // If we didn't filter, it would drop hard.
+        // We show that we are "holding the line".
+        if(state.integrity > 96) state.integrity -= 0.1;
 
-  function systemMode(){
-    const c = sevCounts();
-    if(state.network.state === "offline" || c.crit > 0) return "INCIDENT";
-    if(state.network.state === "degraded" || c.warn > 0) return "DEGRADED";
-    return "HEALTHY";
-  }
-
-  // ===== Simulations =====
-  function simulateNetwork(){
-    const n = state.network;
-
-    if(n.state === "offline"){
-      n.p95 = clamp(n.p95 + 80 + Math.abs(noise(40)), 650, 2400);
-      n.loss = clamp(n.loss + 1.4 + Math.abs(noise(.8)), 2.0, 18.0);
-    } else if(n.state === "degraded"){
-      n.p95 = clamp(320 + Math.abs(noise(120)), 220, 1100);
-      n.loss = clamp(0.9 + Math.abs(noise(.6)), 0.5, 6.0);
+        // Find the bad connector
+        const bad = state.connectors.find(c => c.id === state.malfunctioningConnectorId);
+        if(bad && bad.state !== "malfunction"){
+             bad.state = "malfunction";
+             addAlert(`Sensor Malfunction: ${bad.name}. Isolating data stream.`, "crit");
+             addLog("Neurologix AI", `Detected anomaly in ${bad.name}. Pattern mismatch. Blocked.`, "PROTECTED");
+        }
     } else {
-      n.p95 = clamp(160 + noise(25), 90, 240);
-      n.loss = clamp(0.2 + Math.abs(noise(.18)), 0.05, 1.0);
+        // Recovery
+        state.connectors.forEach(c => {
+            if(c.state === "malfunction") c.state = "online";
+        });
+        if(state.integrity < 97.5) state.integrity += 0.2;
+    }
+
+    // Chart update
+    state.chart.push(state.integrity);
+    state.chart.shift();
+
+    renderAll();
+  }
+
+  // Rendering
+  function renderTop(){
+    const crit = state.alerts.filter(a => a.type==="crit").length;
+    const warn = state.alerts.filter(a => a.type==="warn").length;
+    $("#critCount").textContent = crit;
+    $("#warnCount").textContent = warn;
+    $("#infoCount").textContent = state.alerts.filter(a => a.type==="info").length;
+
+    $("#critDot").className = `pillDot ${crit>0?'crit':''}`;
+
+    if(state.malfunctionMode){
+        $("#subtitle").textContent = "ALERT: SENSOR MALFUNCTION DETECTED · SMART LAB FILTERING ACTIVE";
+        $("#subtitle").style.color = "var(--danger)";
+        $("#labStatus").textContent = "FILTERING NOISE";
+        $("#labStatus").style.fill = "var(--danger)";
+        $("#nSmartLab rect").setAttribute("stroke", "var(--danger)");
+    } else {
+        $("#subtitle").textContent = "Smart Lab Integration Monitor · Quality Gate Active";
+        $("#subtitle").style.color = "rgba(246,243,234,.6)";
+        $("#labStatus").textContent = "NEUROLOGIX AI";
+        $("#labStatus").style.fill = "rgba(246,243,234,.6)";
+        $("#nSmartLab rect").setAttribute("stroke", "rgba(246,243,234,.1)");
+        $("#nSmartLab").classList.add("active");
     }
   }
 
-  function simulateConnectors(){
-    // buffer behaviour
-    state.connectors.forEach(c => {
-      if(state.network.state === "offline"){
-        c.buffer = clamp(c.buffer + Math.round(40 + rand()*80), 0, 25000);
-        c.state = (rand() < 0.06) ? "degraded" : c.state;
-      } else if(state.network.state === "degraded"){
-        c.buffer = clamp(c.buffer + Math.round(rand()*30), 0, 16000);
-        c.state = (rand() < 0.03) ? "degraded" : (c.state === "offline" ? "degraded" : c.state);
-      } else {
-        // flush
-        c.buffer = clamp(c.buffer - Math.round(140 + rand()*260), 0, 25000);
-        if(c.buffer === 0 && c.state !== "offline") c.state = "online";
-      }
-
-      // occasional blips
-      if(state.network.state !== "offline" && rand() < 0.007){
-        c.state = "offline";
-        addAlert("warn", `${c.name} missed heartbeat > 60s`);
-      }
-      if(c.state === "offline" && rand() < 0.10 && state.network.state !== "offline"){
-        c.state = "degraded";
-        addLog({ who:c.name, event:"Reconnected (degraded)", status:"TRACKING", sev:"info" });
-      }
-    });
-
-    state.edgeBuffer = state.connectors.reduce((sum,c)=>sum + c.buffer, 0);
-  }
-
-  function simulatePipeline(){
-    const onlineCount = state.connectors.filter(c => c.state !== "offline").length;
-    const total = state.connectors.length;
-
-    const connectorFactor = onlineCount / total;
-    const netPenalty = state.network.state === "offline" ? 0.05 : state.network.state === "degraded" ? 0.65 : 1.0;
-    const backlogBoost = (state.network.state === "online" && state.edgeBuffer > 800) ? 1.35 : 1.0;
-
-    const base = 2400 + noise(140);
-    state.epm = clamp(base * connectorFactor * netPenalty * backlogBoost, 0, 9200);
-
-    // DQ trends
-    let dq = state.dq + noise(0.12);
-    if(state.network.state === "offline") dq -= 0.18;
-    if(state.connectors.some(c => c.state==="offline")) dq -= 0.12;
-    if(state.smartlab.result === "success") dq += 0.06;
-
-    state.dq = clamp(dq, 82, 99);
-
-    // Integrity score
-    const latencyPenalty = clamp((state.network.p95 - 180) / 18, 0, 25);
-    const lossPenalty = clamp(state.network.loss * 1.2, 0, 25);
-    const bufferPenalty = clamp(state.edgeBuffer / 1800, 0, 18);
-    const dqPenalty = clamp((94 - state.dq) * 1.1, 0, 22);
-
-    state.integrity = clamp(98 - latencyPenalty - lossPenalty - bufferPenalty - dqPenalty, 40, 99);
-
-    // chart shift
-    state.chart.push(state.integrity + noise(0.35));
-    if(state.chart.length > 90) state.chart.shift();
-
-    // detection rules (alerts)
-    // CRIT: uplink down > ~30s simulated by offline state
-    if(state.network.state === "offline" && rand() < 0.08){
-      const existing = state.alerts.some(a => a.open && a.sev==="crit" && a.msg.includes("Uplink down"));
-      if(!existing) addAlert("crit", "Uplink down > 30s. Edge buffering active.");
-    }
-    // WARN: integrity drift
-    if(state.integrity < 85 && rand() < 0.06){
-      addAlert("warn", `Integrity drift: score ${fmt.one(state.integrity)}. Recommend calibration + mapping review.`);
-    }
-    // INFO: backlog flush
-    if(state.network.state === "online" && state.edgeBuffer > 1500 && rand() < 0.05){
-      addAlert("info", "Backlog flush active. Events/min spike expected during reconciliation.");
-    }
-  }
-
-  // ===== Render =====
   function renderKpis(){
+    // If malfunction, show that we are blocking bad data
+    // Valid events = total - bad sensor share (approx 25%)
+    const displayEpm = state.malfunctionMode ? Math.round(state.epm * 0.75) : state.epm;
+
     const kpis = [
-      {
-        label: "Integrity Score",
-        value: `<span class="lime">${fmt.one(state.integrity)}</span>`,
-        meta: `0–100 · p95 ${fmt.int(state.network.p95)} ms`,
-        tip: "Composite of DQ, latency, loss, and mapping confidence."
-      },
-      {
-        label: "Events Normalized / min",
-        value: `<span class="lime">${fmt.int(state.epm)}</span>`,
-        meta: `post-clean · ${state.range}`,
-        tip: "Event throughput after normalization."
-      },
-      {
-        label: "Data Quality",
-        value: `<span class="lime">${fmt.one(state.dq)}%</span>`,
-        meta: `mapping ${state.mapping.version}`,
-        tip: "DQ reflects mapping + calibration confidence."
-      },
-      {
-        label: "Edge Buffer Depth",
-        value: `<span class="lime">${fmt.int(state.edgeBuffer)}</span>`,
-        meta: `msgs queued`,
-        tip: "Queued messages awaiting uplink flush."
-      }
+      { l:"Integrity Score", v:`${fmt.one(state.integrity)}`, m:"Target: >95.0" },
+      { l:"Valid Events / min", v:fmt.int(displayEpm), m: state.malfunctionMode ? "<span style='color:var(--danger)'>~25% Filtered</span>" : "All streams nominal" },
+      { l:"Data Quality", v:`${fmt.one(state.dq)}%`, m:"AI Confidence" }
     ];
 
     $("#kpis").innerHTML = kpis.map(k => `
-      <div class="kpi" title="${k.tip}">
-        <div class="kLabel">${k.label}</div>
-        <div class="kValue">${k.value}</div>
-        <div class="kMeta"><span class="tag">${k.meta}</span></div>
+      <div class="kpi">
+        <div class="kLabel">${k.l}</div>
+        <div class="kValue"><span class="highlight-val">${k.v}</span></div>
+        <div class="kMeta">${k.m}</div>
       </div>
+    `).join("");
+
+    const online = state.connectors.filter(c=>c.state!=="malfunction").length;
+    $("#connSummary").textContent = `${online}/${state.connectors.length} Active`;
+
+    $("#connList").innerHTML = state.connectors.map(c => `
+        <div class="connRow ${c.state==='malfunction'?'malfunction':''}">
+            <div class="connLeft">
+                <div class="connName">${c.name}</div>
+                <div class="connMeta">${c.state==='malfunction' ? 'DATA BLOCKED' : 'Streaming...'}</div>
+            </div>
+            <div class="state">
+                <span class="pillDot ${c.state==='malfunction'?'crit':''}"></span>
+                ${c.state.toUpperCase()}
+            </div>
+        </div>
     `).join("");
   }
 
-  function renderConnectors(){
-    const online = state.connectors.filter(c => c.state==="online").length;
-    $("#connSummary").textContent = `${online}/${state.connectors.length} online`;
+  function renderFlow(){
+     // Visual logic for flow
+     const p1 = $("#pipe1");
+     const p2 = $("#pipe2");
+     const n1 = $("#nSensors rect");
+     const n2 = $("#nSmartLab rect");
+     const n3 = $("#nSmartHub rect");
 
-    $("#connList").innerHTML = state.connectors.map(c => {
-      const st = c.state.toUpperCase();
-      const dotClass = c.state === "online" ? "" : c.state === "degraded" ? "warn" : "crit";
-      const buf = fmt.int(c.buffer);
-      return `
-        <div class="connRow">
-          <div class="connLeft">
-            <div class="connName">${c.name}</div>
-            <div class="connMeta">buffer ${buf} · err ${fmt.one(c.err)}%</div>
-          </div>
-          <div class="state">
-            <span class="pillDot ${dotClass}"></span>${st}
-          </div>
-        </div>
-      `;
-    }).join("");
-  }
+     if(state.malfunctionMode){
+         // Sensor node warning
+         n1.setAttribute("class", "node crit");
+         // Pipe 1 active but maybe warning color? we'll leave as blue/default to show data arriving
 
-  function renderTop(){
-    $("#clock").textContent = fmt.time();
+         // Lab node working hard (active)
+         n2.setAttribute("class", "node active");
 
-    $("#siteSel").value = state.site;
-    $("#rangeSel").value = state.range;
+         // Pipe 2 is PURE (Blue/Green)
+         p2.setAttribute("class", "pipe active");
 
-    const counts = sevCounts();
-    $("#critCount").textContent = counts.crit;
-    $("#warnCount").textContent = counts.warn;
-    $("#infoCount").textContent = counts.info;
+         // Hub is Safe
+         n3.setAttribute("class", "node active");
 
-    // System mode + subtitle
-    const mode = systemMode();
-    $("#modeTag").textContent = `MODE: ${mode}`;
-    $("#subtitle").textContent = `SITE: ${state.site} · MODE: ${mode} · MAPPING: ${state.mapping.version}`;
-
-    // flow meta
-    $("#netState").textContent = state.network.state.toUpperCase();
-    $("#mapVersion").textContent = state.mapping.version;
-
-    $("#bufferTag").textContent = `Edge buffer: ${fmt.int(state.edgeBuffer)} msgs`;
-    $("#dqTag").textContent = `DQ: ${fmt.one(state.dq)}%`;
-    $("#lossTag").textContent = `Loss: ${fmt.one(state.network.loss)}%`;
-
-    // chart meta
-    $("#chartMeta").textContent = `p95: ${fmt.int(state.network.p95)} ms · events/min: ${fmt.int(state.epm)}`;
-
-    // node active states
-    $("#nPhysical").classList.add("active");
-    $("#nEdge").classList.add("active");
-    $("#nSmartLab").classList.add("active");
-    $("#nNetwork").classList.toggle("active", state.network.state !== "offline");
-
-    // crit dot in badge
-    $("#critDot").className = "pillDot " + (counts.crit > 0 || state.network.state==="offline" ? "crit" : "");
+         $("#flowMeta").textContent = "Filtering Malfunction";
+         $("#flowMeta").style.color = "var(--danger)";
+     } else {
+         n1.setAttribute("class", "node active");
+         n2.setAttribute("class", "node active");
+         n3.setAttribute("class", "node active");
+         p1.setAttribute("class", "pipe active");
+         p2.setAttribute("class", "pipe active");
+         $("#flowMeta").textContent = "Trustworthy Data Only";
+         $("#flowMeta").style.color = "";
+     }
   }
 
   function renderActions(){
-    // derive actions from state
-    const mode = systemMode();
-    const actions = [];
-
-    if(state.network.state === "offline"){
-      actions.push({
-        title: "Restore uplink + confirm failover",
-        owner: "Network Lead",
-        impact: "Reduce buffer growth (~R 45k/day risk avoided, demo)",
-        conf: 92
-      });
-    } else if(state.network.state === "degraded"){
-      actions.push({
-        title: "Throttle non-critical telemetry",
-        owner: "Ops Tech",
-        impact: "Stabilize p95 latency to < 300ms",
-        conf: 84
-      });
-    } else {
-      actions.push({
-        title: "Verify Smart Lab pack schedule",
-        owner: "Smart Lab",
-        impact: "Maintain DQ ≥ 94% (reduces false alarms)",
-        conf: 78
-      });
-    }
-
-    if(state.integrity < 88){
-      actions.push({
-        title: "Run calibration + publish mapping",
-        owner: "Smart Lab",
-        impact: "Recover integrity score by +4 to +8 (demo)",
-        conf: 86
-      });
-    } else {
-      actions.push({
-        title: "Review top anomalies (last 60 min)",
-        owner: "Shift Supervisor",
-        impact: "Prevent drift from becoming downtime",
-        conf: 73
-      });
-    }
-
-    actions.push({
-      title: "Export audit pack for governance",
-      owner: "Ops Analyst",
-      impact: "Signed evidence: KPIs + events + mapping version",
-      conf: 95
-    });
-
-    const top3 = actions.slice(0,3);
-
-    $("#actions").innerHTML = top3.map(a => `
-      <div class="action">
-        <div class="actionTop">
-          <div>
-            <div class="actionTitle">${a.title}</div>
-            <div class="actionMeta">
-              <span class="tag">Owner: ${a.owner}</span>
-              <span class="tag">Impact: ${a.impact}</span>
-              <span class="tag conf" title="Rule-based confidence (demo). Not an ML probability.">Confidence: ${a.conf}%</span>
+      let html = "";
+      if(state.malfunctionMode){
+          html += `
+            <div class="action" style="border-color:var(--danger)">
+               <div class="actionTop">
+                 <div class="actionTitle" style="color:var(--danger)">Sensor Malfunction Detected</div>
+               </div>
+               <div class="actionMeta" style="color:#fff">
+                 Neurologix AI has isolated <b>${state.connectors.find(c=>c.id===state.malfunctioningConnectorId)?.name}</b>.
+                 Dashboards remain operational with partial data.
+               </div>
+               <div style="margin-top:12px;">
+                 <button class="btn primary" onclick="document.dispatchEvent(new CustomEvent('fix-sensor'))">Dispatch Repair Crew</button>
+               </div>
             </div>
-          </div>
+          `;
+      }
+
+      html += `
+        <div class="action">
+            <div class="actionTitle">Review Daily Mapping Report</div>
+            <div class="actionMeta">Confidence: 98% · Owner: System</div>
         </div>
-      </div>
-    `).join("");
+      `;
+      $("#actions").innerHTML = html;
   }
 
   function renderLog(){
-    const filter = $("#logFilter").value;
-    const rows = (filter === "all")
-      ? state.log
-      : state.log.filter(r => r.sev === filter);
-
-    $("#logBody").innerHTML = (rows.length ? rows.slice(0, 50) : [{
-      ts: fmt.ts(), who:"System", event:"No events recorded yet.", status:"—", sev:"info"
-    }]).map(r => `
-      <tr>
-        <td style="font-family:var(--mono);">${r.ts}</td>
-        <td>${r.who}</td>
-        <td>${r.event}</td>
-        <td><span class="tag">${r.status}</span></td>
-      </tr>
-    `).join("");
+      $("#logBody").innerHTML = state.log.map(l => `
+        <tr>
+            <td style="font-family:var(--mono); color:rgba(255,255,255,.4)">${l.time}</td>
+            <td>${l.who}</td>
+            <td>${l.event}</td>
+            <td><span class="tag">${l.status}</span></td>
+        </tr>
+      `).join("");
   }
 
-  // ===== Chart drawing (lime line + dark gridlines) =====
   function drawChart(){
-    const canvas = $("#chart");
-    const ctx = canvas.getContext("2d");
+      const ctx = $("#chart").getContext("2d");
+      const w = ctx.canvas.width = $("#chart").clientWidth;
+      const h = ctx.canvas.height = $("#chart").clientHeight;
 
-    const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth * dpr;
-    const h = canvas.clientHeight * dpr;
-    canvas.width = w;
-    canvas.height = h;
+      ctx.clearRect(0,0,w,h);
 
-    ctx.clearRect(0,0,w,h);
+      // Grid
+      ctx.strokeStyle = "rgba(255,255,255,0.05)";
+      ctx.beginPath();
+      for(let i=0; i<w; i+=40){ ctx.moveTo(i,0); ctx.lineTo(i,h); }
+      for(let i=0; i<h; i+=40){ ctx.moveTo(0,i); ctx.lineTo(w,i); }
+      ctx.stroke();
 
-    // gridlines (dark)
-    ctx.strokeStyle = "rgba(246,243,234,.08)";
-    ctx.lineWidth = 1 * dpr;
-    const gx = 10, gy = 6;
-    for(let i=1;i<gx;i++){
-      const x = (w/gx)*i;
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-    }
-    for(let j=1;j<gy;j++){
-      const y = (h/gy)*j;
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-    }
+      // Line
+      ctx.strokeStyle = state.malfunctionMode ? "#ff0542" : "#D2FF05";
+      ctx.lineWidth = 3;
+      ctx.lineJoin = "round";
+      ctx.shadowColor = ctx.strokeStyle;
+      ctx.shadowBlur = 10;
 
-    const data = state.chart;
-    const min = 60, max = 100; // integrity score domain
-
-    const X = (i) => (i/(data.length-1)) * (w - 20*dpr) + 10*dpr;
-    const Y = (v) => {
-      const t = (v - min) / (max - min);
-      return (h - 10*dpr) - t*(h - 20*dpr);
-    };
-
-    // lime line
-    ctx.strokeStyle = "rgba(210,255,5,.95)";
-    ctx.shadowColor = "rgba(210,255,5,.20)";
-    ctx.shadowBlur = 18 * dpr;
-    ctx.lineWidth = 2.4 * dpr;
-    ctx.beginPath();
-    data.forEach((v,i) => {
-      const x = X(i), y = Y(v);
-      if(i===0) ctx.moveTo(x,y);
-      else ctx.lineTo(x,y);
-    });
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-
-    // last point
-    const lx = X(data.length-1), ly = Y(data[data.length-1]);
-    ctx.fillStyle = "rgba(210,255,5,.95)";
-    ctx.beginPath(); ctx.arc(lx, ly, 3.6*dpr, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      state.chart.forEach((v, i) => {
+          const x = (i / (state.chart.length-1)) * w;
+          const y = h - ((v - 80) / 20) * h; // scale 80-100
+          if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      });
+      ctx.stroke();
   }
 
-  // ===== Flow pulse =====
-  function pulse(on){
-    const p = $("#pulseA");
-    p.classList.toggle("on", on);
-  }
-
-  // ===== Smart Lab modal =====
-  function renderRules(){
-    $("#rulesBody").innerHTML = state.rules.map(r => `
-      <tr>
-        <td style="padding:8px 6px; border-bottom:1px solid rgba(246,243,234,.06); font-family:var(--mono); font-size:11px; color:rgba(246,243,234,.82);">${r.raw}</td>
-        <td style="padding:8px 6px; border-bottom:1px solid rgba(246,243,234,.06); font-family:var(--mono); font-size:11px; color:rgba(246,243,234,.82);">${r.to}</td>
-        <td style="padding:8px 6px; border-bottom:1px solid rgba(246,243,234,.06); font-family:var(--mono); font-size:11px; color:rgba(246,243,234,.72);">${r.tx}</td>
-      </tr>
-    `).join("");
-    $("#mapTag").textContent = state.mapping.version;
-  }
-
-  function openModal(){
-    $("#modalBack").classList.add("on");
-    renderRules();
-    $("#calBar").style.width = `${state.smartlab.progress}%`;
-    $("#calMeta").textContent = `step=${state.smartlab.step} · progress=${Math.round(state.smartlab.progress)}% · result=${state.smartlab.result}`;
-  }
-  function closeModal(){
-    $("#modalBack").classList.remove("on");
-  }
-
-  function startCalibration(){
-    state.smartlab.progress = 0;
-    state.smartlab.step = 1;
-    state.smartlab.result = "pending";
-    toast("Smart Lab", "Calibration started (demo).");
-    addLog({ who:"Smart Lab", event:"Calibration started: Dust + Belt Scale Verification", status:"RUNNING", sev:"info" });
-
-    const timer = setInterval(() => {
-      state.smartlab.progress = clamp(state.smartlab.progress + 10 + rand()*14, 0, 100);
-      state.smartlab.step = state.smartlab.progress < 55 ? 1 : 2;
-
-      $("#calBar").style.width = `${state.smartlab.progress}%`;
-      $("#calMeta").textContent = `step=${state.smartlab.step} · progress=${Math.round(state.smartlab.progress)}% · result=${state.smartlab.result}`;
-
-      if(state.smartlab.progress >= 100){
-        clearInterval(timer);
-        state.smartlab.step = 3;
-        state.smartlab.result = "success";
-        state.dq = clamp(state.dq + 1.2, 82, 99);
-        state.integrity = clamp(state.integrity + 3.5, 40, 99);
-
-        addLog({ who:"Smart Lab", event:"Calibration complete. Reference readings verified.", status:"DONE", sev:"info" });
-        addAlert("info", "Calibration applied. DQ and integrity improved (demo).");
-        renderAll();
-      }
-    }, 650);
-  }
-
-  function publishMapping(){
-    const bump = 4 + Math.floor(rand()*4);
-    state.mapping.version = `v1.${bump}`;
-    state.mapping.confidence = clamp(state.mapping.confidence + 2, 70, 98);
-    state.dq = clamp(state.dq + 0.6, 82, 99);
-    addLog({ who:"Smart Lab", event:`Mapping published: ${state.mapping.version}`, status:"PUBLISHED", sev:"info" });
-    toast("Mapping Published", `Published ${state.mapping.version} to Hub (demo).`);
-    renderRules();
-    renderAll();
-  }
-
-  // ===== Triggers =====
-  function triggerOutage(){
-    state.network.state = "offline";
-    state.network.lastFlip = now();
-    addAlert("crit", "Uplink down. Store-and-forward buffering engaged.");
-    state.connectors.forEach(c => c.state = (c.state==="offline" ? "offline" : "degraded"));
-    pulse(true); setTimeout(() => pulse(false), 2400);
-    highlight("center");
-    renderAll();
-  }
-
-  function triggerDust(){
-    addAlert("warn", "PM10 exceedance detected. Recommend water carts + speed limit (demo).");
-    addLog({ who:"HSE", event:"Mitigation playbook surfaced for dust exceedance", status:"SUGGESTED", sev:"warn" });
-    state.integrity = clamp(state.integrity - 3.2, 40, 99);
-    pulse(true); setTimeout(() => pulse(false), 2400);
-    highlight("right");
-    renderAll();
-  }
-
-  function highlight(which){
-    ["leftPanel","centerPanel","rightPanel","bottomPanel"].forEach(id => $("#"+id).classList.remove("highlight"));
-    if(which==="left") $("#leftPanel").classList.add("highlight");
-    if(which==="center") $("#centerPanel").classList.add("highlight");
-    if(which==="right") $("#rightPanel").classList.add("highlight");
-    if(which==="bottom") $("#bottomPanel").classList.add("highlight");
-    setTimeout(() => ["leftPanel","centerPanel","rightPanel","bottomPanel"].forEach(id => $("#"+id).classList.remove("highlight")), 4200);
-  }
-
-  // ===== Walkthrough =====
-  const walk = [
-    { name:"Baseline", run:() => {
-      state.network.state = "online";
-      addAlert("info", "Walkthrough: baseline healthy state (demo).");
-      highlight("left");
-    }},
-    { name:"Dust Spike", run:() => triggerDust() },
-    { name:"Network Outage", run:() => triggerOutage() },
-    { name:"Recovery + Flush", run:() => {
-      state.network.state = "online";
-      addAlert("info", "Network recovered. Backlog flush active (demo).");
-      state.connectors.forEach(c => c.state = "online");
-      highlight("center");
-    }},
-    { name:"Smart Lab Calibration", run:() => { openModal(); startCalibration(); highlight("right"); }}
-  ];
-
-  function setWalk(on){
-    state.walkthrough = on;
-    $("#walkBtn").textContent = `Walkthrough: ${on ? "ON" : "OFF"}`;
-    toast("Walkthrough", on ? "Auto-cycling scenarios." : "Stopped.");
-    if(on){
-      state.walkStep = 0;
-      walk[state.walkStep].run();
-      state.walkTimer = setInterval(() => {
-        state.walkStep = (state.walkStep + 1) % walk.length;
-        walk[state.walkStep].run();
-      }, 12000);
-    } else {
-      clearInterval(state.walkTimer);
-      state.walkTimer = null;
-    }
-  }
-
-  // ===== Export =====
-  function exportAuditPack(){
-    const payload = [
-      `VERALOGIX — ${MODULE_NAME} (MOCK AUDIT PACK)`,
-      `Site: ${state.site} · Range: ${state.range}`,
-      `Generated: ${new Date().toString()}`,
-      ``,
-      `KPIs:`,
-      `- Integrity Score: ${fmt.one(state.integrity)}`,
-      `- Events/min: ${fmt.int(state.epm)}`,
-      `- DQ: ${fmt.one(state.dq)}%`,
-      `- Edge Buffer: ${fmt.int(state.edgeBuffer)} msgs`,
-      `- Network p95: ${fmt.int(state.network.p95)} ms · Loss: ${fmt.one(state.network.loss)}%`,
-      `- Mapping: ${state.mapping.version} (confidence ${state.mapping.confidence}%)`,
-      ``,
-      `Open Alerts:`,
-      ...(state.alerts.filter(a=>a.open).slice(0,20).map(a => `- [${a.sev.toUpperCase()}] ${a.msg}`)),
-      ``,
-      `Recent Log (top 50):`,
-      ...state.log.slice(0,50).map(r => `- ${r.ts} | ${r.who} | ${r.event} | ${r.status}`),
-      ``,
-      `Note: fabricated demo telemetry intended to resemble production patterns.`
-    ].join("\n");
-
-    const blob = new Blob([payload], {type:"text/plain"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `veralogix-audit-pack-${new Date().toISOString().slice(0,10)}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-
-    toast("Exported", "Audit pack downloaded (demo).");
-  }
-
-  // ===== Main render =====
   function renderAll(){
-    renderTop();
-    renderKpis();
-    renderConnectors();
-    renderActions();
-    renderLog();
-    drawChart();
+      renderKpis();
+      renderFlow();
+      renderActions();
+      drawChart();
   }
 
-  // ===== Bind events =====
-  $("#siteSel").addEventListener("change", e => {
-    state.site = e.target.value;
-    addLog({ who:"EXCO", event:`Site changed to ${state.site}`, status:"OK", sev:"info" });
-    renderAll();
-  });
-  $("#rangeSel").addEventListener("change", e => {
-    state.range = e.target.value;
-    addLog({ who:"EXCO", event:`Range changed to ${state.range}`, status:"OK", sev:"info" });
-    renderAll();
+  // Actions
+  $("#tMalfunction").addEventListener("click", () => {
+      if(state.malfunctionMode) return;
+      state.malfunctionMode = true;
+      state.malfunctioningConnectorId = "c1"; // Deterministic for demo
+      addLog("System", "Simulating sensor hardware failure...", "TEST");
+      renderTop();
+      renderAll();
   });
 
-  $("#logFilter").addEventListener("change", renderLog);
+  document.addEventListener("fix-sensor", () => {
+      addAlert("Maintenance crew dispatched. Sensor repaired.", "info");
+      state.malfunctionMode = false;
+      state.malfunctioningConnectorId = null;
+      renderTop();
+      renderAll();
+  });
 
-  $("#walkBtn").addEventListener("click", () => setWalk(!state.walkthrough));
-  $("#exportBtn").addEventListener("click", exportAuditPack);
-  $("#clearAlerts").addEventListener("click", () => { resolveAll(); renderAll(); });
+  $("#tDust").addEventListener("click", () => {
+      addAlert("Dust levels exceeding threshold (PM10 > 50µg).", "warn");
+      state.integrity -= 5;
+  });
 
-  $("#tOutage").addEventListener("click", triggerOutage);
-  $("#tDust").addEventListener("click", triggerDust);
-  $("#tCal").addEventListener("click", () => { openModal(); startCalibration(); });
+  $("#tCal").addEventListener("click", () => {
+      $("#modalBack").classList.add("on");
+      // Mock rules
+      $("#rulesBody").innerHTML = `
+        <tr><td>raw.dust_val</td><td>payload.pm10</td><td>x * 1.02</td></tr>
+        <tr><td>raw.vib_x</td><td>payload.vib</td><td>moving_avg(10)</td></tr>
+      `;
+  });
 
-  $("#openLab").addEventListener("click", openModal);
-  $("#closeModal").addEventListener("click", closeModal);
-  $("#modalBack").addEventListener("click", (e) => { if(e.target === $("#modalBack")) closeModal(); });
+  $("#closeModal").addEventListener("click", () => $("#modalBack").classList.remove("on"));
 
-  $("#startCal").addEventListener("click", startCalibration);
-  $("#publishMap").addEventListener("click", publishMapping);
+  $("#startCal").addEventListener("click", () => {
+      const bar = $("#calBar");
+      let w = 0;
+      $("#calMeta").textContent = "Calibrating...";
+      const t = setInterval(() => {
+          w += 5;
+          bar.style.width = w+"%";
+          if(w>=100){
+              clearInterval(t);
+              $("#calMeta").textContent = "Complete.";
+              addLog("Neurologix AI", "Calibration applied. Integrity restored.", "SUCCESS");
+              state.dq += 0.5;
+              state.integrity += 1.5;
+              setTimeout(() => $("#modalBack").classList.remove("on"), 800);
+          }
+      }, 50);
+  });
 
-  // ===== Tick loop =====
-  function tick(){
-    $("#clock").textContent = fmt.time();
+  $("#clearAlerts").addEventListener("click", () => {
+      state.alerts = [];
+      renderTop();
+  });
 
-    simulateNetwork();
-    simulateConnectors();
-    simulatePipeline();
-
-    // pulse occasionally to show "data path" activity
-    if(rand() < 0.22 && state.network.state !== "offline"){
-      pulse(true);
-      setTimeout(() => pulse(false), 1600);
-    }
-
-    // recovery auto
-    if(state.network.state === "offline" && rand() < 0.04){
-      state.network.state = "degraded";
-      addAlert("warn", "Link restored but degraded. Monitoring p95 + loss (demo).");
-    } else if(state.network.state === "degraded" && rand() < 0.06){
-      state.network.state = "online";
-      addAlert("info", "Link stabilized. Backlog flush expected (demo).");
-      state.connectors.forEach(c => c.state = "online");
-    }
-
-    renderAll();
-  }
-
-  // Bootstrap
-  addLog({ who:"System", event:"Showcase started (offline demo).", status:"OK", sev:"info" });
-  toast("Demo ready", "Mock app running offline. Use Walkthrough for auto-demo.");
+  // Init
+  addLog("System", "Neurologix AI Hub initialized.", "READY");
+  setInterval(simulate, 1000);
   renderAll();
-  setInterval(tick, 1000);
+  renderTop();
 
 })();
 </script>
