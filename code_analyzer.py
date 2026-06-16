@@ -31,9 +31,9 @@ def analyze_file(filepath):
                  infos.append({"line": line_num, "type": "Style", "message": "console.log found."})
 
             # Check for memory guideline: no blue/cyan themes
-            if re.search(r'#(00FFFF|0000FF|00FFFF|00BFFF|1E90FF|87CEEB|87CEFA|4682B4|ADD8E6)', line, re.IGNORECASE) or \
-               re.search(r'rgba?\(\s*0\s*,\s*0\s*,\s*255', line, re.IGNORECASE) or \
-               'cyan' in line.lower() or 'blue' in line.lower():
+            if (re.search(r'#(00FFFF|0000FF|00BFFF|1E90FF|87CEEB|87CEFA|4682B4|ADD8E6)', line, re.IGNORECASE) or
+                re.search(r'rgba?\(\s*0\s*,\s*0\s*,\s*255', line, re.IGNORECASE) or
+                re.search(r'\b(blue|cyan)\b', line, re.IGNORECASE)):
                  warnings.append({"line": line_num, "type": "Style", "message": "Potential use of blue/cyan theme found which is rejected by branding."})
 
     # Full file content checks
