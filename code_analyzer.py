@@ -21,7 +21,7 @@ def analyze_file(filepath):
 
         # HTML/CSS/JS Checks
         if filepath.endswith(('.html', '.js', '.css')):
-            if 'var ' in line and '.js' in filepath:
+            if re.search(r'\bvar\s', line) and filepath.endswith('.js'):
                  warnings.append({"line": line_num, "type": "Style", "message": "Use let/const instead of var."})
             if 'document.write' in line:
                  warnings.append({"line": line_num, "type": "Vulnerability", "message": "document.write found (potential XSS)"})
