@@ -12,7 +12,7 @@ def analyze_file(filepath):
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
             lines = content.split('\n')
-    except UnicodeDecodeError:
+    except (UnicodeDecodeError, OSError):
         return errors, warnings, infos
 
     # Line by line checks
